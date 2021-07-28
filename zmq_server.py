@@ -3,7 +3,7 @@ import threading
 
 
 class ZMQ_Server():
-    def __init__(self, frontend_port, backend_port, n_threads):
+    def __init__(self, frontend_port, backend_port, n_workers):
         self.backend_port = backend_port
         self.context = zmq.Context()
         self.frontend = self.context.socket(zmq.ROUTER)
@@ -16,7 +16,7 @@ class ZMQ_Server():
         self.poller.register(self.backend, zmq.POLLIN)
 
         self.workers = []
-        for k in range(0, n_threads):
+        for k in range(0, n_workers):
             self.workers.append(threading.Thread(target=self.initialize_worker))
             self.workers[-1].start()
 
